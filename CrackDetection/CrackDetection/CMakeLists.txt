@@ -14,20 +14,12 @@ if (OPENMP_FOUND)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-
 include_directories (${OPENCV_INCLUDE_DIR})
-
 include_directories (${CMAKE_CURRENT_BINARY_DIR})
-
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
 
+add_executable (inverse inverse.cpp)
+target_link_libraries (inverse ${OpenCV_LIBS})
 
-add_executable (lectureImage
-  main.cpp
-)
-
-
-target_link_libraries (lectureImage
-  ${OpenCV_LIBS}
-)
-
+add_executable (evaluation evaluation.cpp scoring.cpp)
+target_link_libraries (evaluation ${OpenCV_LIBS})

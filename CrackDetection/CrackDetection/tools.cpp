@@ -1,12 +1,12 @@
 #include "tools.hpp"
 
-cv::Mat gaussianFilter(cv::Mat image, int l, double sigma) {
+void gaussianFilter(cv::Mat& image, int l, double sigma) {
 	cv::Mat filtered;
 	cv::GaussianBlur(image, filtered, cv::Size(l*2+1, l * 2 + 1), sigma, sigma);
-	return filtered;
+	image = filtered;
 }
 
-cv::Mat sobelFilter(cv::Mat image) {
+void sobelFilter(cv::Mat& image) {
 	cv::Mat grad_x;
 	cv::Sobel(image, grad_x, image.depth(), 1, 0);
 	cv::Mat abs_grad_x;
@@ -20,10 +20,10 @@ cv::Mat sobelFilter(cv::Mat image) {
 	cv::Mat out;
 	cv::addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0, out);
 
-	return out;
+	image = out;
 }
 
-cv::Mat binaryFilter(cv::Mat image, double factor) {
+void binaryFilter(cv::Mat& image, double factor) {
 	cv::Mat out = image.clone();
 	double min, max;
 	cv::minMaxLoc(out, &min, &max);
@@ -38,12 +38,12 @@ cv::Mat binaryFilter(cv::Mat image, double factor) {
 				out.at<uchar>(cv::Point(x, y)) = 0;
 		}
 	}
-	return out;
+	image = out;
 }
 
-cv::Mat clusterRemoval(cv::Mat binary, int threshold) {
-	cv::Mat temp = binary.clone();
-	cv::Mat out = cv::Mat(binary.rows, binary.cols, binary.type());
+void clusterRemoval(cv::Mat& image, int threshold) {
+	cv::Mat temp = image.clone();
+	cv::Mat out = cv::Mat(image.rows, image.cols, image.type());
 	for (int x = 0; x < out.cols; x++)
 		for (int y = 0; y < out.rows; y++)
 			out.at<uchar>(cv::Point(x, y)) = 0;
@@ -62,7 +62,7 @@ cv::Mat clusterRemoval(cv::Mat binary, int threshold) {
 			}
 		}
 	}
-	return out;
+	image = out;
 }
 
 std::set<mPoint> findCluster(cv::Mat binary, int x, int y) {

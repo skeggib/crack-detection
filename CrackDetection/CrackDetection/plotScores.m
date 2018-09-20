@@ -1,0 +1,13 @@
+graphics_toolkit("gnuplot");
+A = csvread('bin/curve.csv');
+xtick = A(1,1):((A(end,1) - A(1,1)) / (size(A,1) - 1)):A(end,1);
+figure('visible', 'off');
+plot(A(:,1), A(:,2), '-o');
+hold on;
+plot(A(:,1), A(:,3), '-o');
+axis([A(1,1) A(end,1) 0 1]);
+set(gca,'xtick', xtick);
+legend('precision', 'recall');
+xlabel('parameter');
+saveas(gcf, 'bin/curve.png');
+close;

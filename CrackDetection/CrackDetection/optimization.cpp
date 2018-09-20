@@ -8,45 +8,23 @@
 uchar dichotomy(std::function<void(uchar, double&, double&)> scoreFunction, uchar min, uchar max, std::string name);
 
 int main(int argc, char** argv) {
-	auto real = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
-	auto expected = cv::imread(argv[2], cv::IMREAD_GRAYSCALE);
+	auto realName = argv[1];
+	auto expectedName = argv[2];
+	auto real = cv::imread(realName, cv::IMREAD_GRAYSCALE);
+	auto expected = cv::imread(expectedName, cv::IMREAD_GRAYSCALE);
 
-	cv::Mat edges = sobelFilter(real);
-	auto pairs = prlist<double>([=](double parameter, double& precision, double& recall) {
-		cv::Mat blured = gaussianFilter(edges, 20, parameter);
-		cv::Mat binary = binaryFilter(blured, 0.3);
-		cv::Mat clustered = clusterRemoval(binary, 100);
-		score(expected, clustered, 1, precision, recall);
-		std::cout << parameter << " => \t" << precision << " \t" << recall << std::endl;
-	}, 0.1, 1, 0.1);
-	cv::imshow("curve", prcurve(pairs));
+	auto list = prlist<int>([=](auto parameter, auto& precision, auto& recall) {
+		auto image = real.clone();
+		gaussianFilter(image, 20, 0.5);
+		sobelFilter(image);
+		binaryFilter(image, 0.5);
+		clusterRemoval(image, parameter);
+		score(expected, image, 1, precision, recall);
+		std::cout << parameter << " => " << precision << " " << recall << std::endl;
+	}, 0, 200, 10);
+	writeCsv("curve.csv", list);
+	cv::imshow("curve", prcurve(list));
 	cv::waitKey();
-	std::ofstream stream;
-	stream.open("curve.csv");
-	for each (auto pair in pairs)
-		stream << pair.second << ", " << pair.first << std::endl;
-	stream.close();
-	/*auto pairs = prlist<uchar>([=](uchar parameter, double& precision, double&recall) {
-		score(expected, binary(filtered, parameter), 0, precision, recall);
-	}, 0, 255, 10);
-	auto curve = prcurve<int>(pairs);
-	cv::imshow("curve", curve);
-	cv::waitKey();*/
-	
-	/*uchar binaryThreshold = dichotomy([=](uchar threshold, double& precision, double& recall) {
-		score(expected, toBinary(edges, threshold), 0, precision, recall);
-	}, 0, 255, "binary");
-
-	cv::Mat binary = toBinary(edges, binaryThreshold);
-
-	uchar clusterThreshold = dichotomy([=](uchar threshold, double& precision, double& recall) {
-		score(expected, clusterRemoval(binary, threshold), 0, precision, recall);
-	}, 0, 255, "cluster");
-
-	cv::Mat out = clusterRemoval(binary, clusterThreshold);
-
-	cv::imshow("out", out);
-	cv::waitKey();*/
 }
 
 uchar dichotomy(std::function<void(uchar, double&, double&)> scoreFunction, uchar min, uchar max, std::string name) {

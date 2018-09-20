@@ -1,9 +1,5 @@
 ﻿#include <opencv2/opencv.hpp>
-#include <stdio.h>
 #include <iostream>
-
-using namespace std;
-using namespace cv;
 
 int main(int argc, char** argv) {
 
@@ -12,10 +8,10 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 
-	auto imageIn = imread(argv[1], IMREAD_GRAYSCALE);
+	auto imageIn = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
 	if (!imageIn.data)
 	{
-		cout << "Could not open or find the image" << std::endl;
+		std::cout << "Could not open or find the image" << std::endl;
 		return -1;
 	}
 
@@ -25,7 +21,7 @@ int main(int argc, char** argv) {
 	{
 		for (int j = 0; j < imageOut.cols; j++)
 		{
-			imageOut.at<char>(Point(j, i)) = 255 - imageOut.at<char>(Point(j, i));
+			imageOut.at<char>(cv::Point(j, i)) = 255 - imageOut.at<char>(cv::Point(j, i));
 		}
 	}
 	

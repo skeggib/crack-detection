@@ -18,8 +18,20 @@ include_directories (${OPENCV_INCLUDE_DIR})
 include_directories (${CMAKE_CURRENT_BINARY_DIR})
 include_directories (${CMAKE_CURRENT_SOURCE_DIR})
 
+add_executable (evaluation evaluation.cpp scoring.cpp)
+target_link_libraries (evaluation ${OpenCV_LIBS})
+
 add_executable (inverse inverse.cpp)
 target_link_libraries (inverse ${OpenCV_LIBS})
 
-add_executable (evaluation evaluation.cpp scoring.cpp)
-target_link_libraries (evaluation ${OpenCV_LIBS})
+add_executable (sobel sobel.cpp tools.cpp)
+target_link_libraries (sobel ${OpenCV_LIBS})
+
+add_executable (gaussianBlurTest gaussianBlurTest.cpp)
+target_link_libraries (gaussianBlurTest ${OpenCV_LIBS})
+
+add_executable (clusters clusters.cpp tools.cpp)
+target_link_libraries (clusters ${OpenCV_LIBS})
+
+add_executable (optimization optimization.cpp tools.cpp scoring.cpp)
+target_link_libraries (optimization ${OpenCV_LIBS})

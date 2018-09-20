@@ -22,7 +22,7 @@ void score(cv::Mat expected, cv::Mat actual, int delta, double& precision, doubl
 					// Recherche dans le voisinnage
 					bool found = false;
 					for (int dx = std::max(-delta, -x); dx <= std::min(delta, expected.cols - x - 1) && !found; dx++) {
-						for (int dy = std::max(-delta, -y); dy <= std::min(delta, expected.cols - y - 1) && !found; dy++) {
+						for (int dy = std::max(-delta, -y); dy <= std::min(delta, expected.rows - y - 1) && !found; dy++) {
 							if (actualValue == expected.at<unsigned char>(cv::Point(x + dx, y + dy)))
 								found = true;
 						}

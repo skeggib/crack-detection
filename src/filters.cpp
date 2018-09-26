@@ -52,11 +52,11 @@ void clusterRemoval(cv::Mat& image, int threshold) {
 			if (temp.at<uchar>(cv::Point(x, y)) == UCHAR_MAX) {
 				std::set<mPoint> cluster = findCluster(temp, x, y);
 				if (cluster.size() > threshold) {
-					for each (cv::Point point in cluster) {
+					for (auto point : cluster) {
 						out.at<uchar>(point) = UCHAR_MAX;
 					}
 				}
-				for each (cv::Point point in cluster) {
+				for (auto point : cluster) {
 					temp.at<uchar>(point) = 0;
 				}
 			}
@@ -84,7 +84,7 @@ void searchCluster(cv::Mat binary, mPoint point, std::set<mPoint>& cluster) {
 	if (point.y < binary.rows - 1)
 		neighbors.insert(mPoint(point.x, point.y + 1));
 
-	for each (mPoint neighbor in neighbors) {
+	for (auto neighbor : neighbors) {
 		if (std::find(cluster.begin(), cluster.end(), neighbor) == cluster.end()) {
 			if (binary.at<uchar>(neighbor) == UCHAR_MAX) {
 				searchCluster(binary, neighbor, cluster);

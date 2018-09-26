@@ -60,7 +60,7 @@ cv::Mat prcurve(std::vector<parameterScore<T>> prlist) {
 
 template <typename T>
 void writeCsv(std::ostream& stream, std::vector<parameterScore<T>> scores) {
-	for each (auto score in scores)
+	for (auto score : scores)
 	{
 		stream << score.parameter << ", ";
 		stream << score.precision << ", ";

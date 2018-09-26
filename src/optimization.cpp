@@ -38,7 +38,8 @@ int main(int argc, char** argv) {
 			list.push_back(parameterScore<int>(i, precision, recall));
 			++i;
 
-			double performance = precision * precision + recall * recall / (abs(precision - recall) * abs(precision - recall));
+            double absDiff = std::abs(precision - recall);
+			double performance = precision * precision + recall * recall / (absDiff * absDiff);
 			if (bestPerformance < performance) {
 				bestPerformance = performance;
 				bestPrecision = precision;
@@ -64,8 +65,8 @@ int main(int argc, char** argv) {
 	std::cout << " => " << bestPerformance;
 	std::cout << std::endl;
 
-	cv::imshow("PR curve", prcurve(list));
-	cv::waitKey();
+	//cv::imshow("PR curve", prcurve(list));
+	//cv::waitKey();
 
 	return 0;
 }

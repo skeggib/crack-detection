@@ -1,53 +1,72 @@
-#include <functional>
 #include <opencv2/opencv.hpp>
-#include "tools.hpp"
+#include <iostream>
+
+#include "arguments.hpp"
+#include "filters.hpp"
 #include "scoring.hpp"
-#include <string>
 #include "prcurve.hpp"
 
-uchar dichotomy(std::function<void(uchar, double&, double&)> scoreFunction, uchar min, uchar max, std::string name);
-
 int main(int argc, char** argv) {
-	auto realName = argv[1];
-	auto expectedName = argv[2];
-	auto real = cv::imread(realName, cv::IMREAD_GRAYSCALE);
-	auto expected = cv::imread(expectedName, cv::IMREAD_GRAYSCALE);
+    arguments_t args(argc, argv);
+    if (args.parametersSize() < 2) {
+        std::cout << "Usage: " << argv[0] << " input expected" << std::endl;
+        return -1;
+    }
 
-	auto list = prlist<int>([=](auto parameter, auto& precision, auto& recall) {
-		auto image = real.clone();
-		gaussianFilter(image, 20, 0.5);
-		sobelFilter(image);
-		binaryFilter(image, 0.5);
-		clusterRemoval(image, parameter);
-		score(expected, image, 1, precision, recall);
-		std::cout << parameter << " => " << precision << " " << recall << std::endl;
-	}, 0, 200, 10);
-	writeCsv("curve.csv", list);
-	cv::imshow("curve", prcurve(list));
-	cv::waitKey();
-}
+	auto image = cv::imread(args[0], cv::IMREAD_GRAYSCALE);
+	auto expected = cv::imread(args[1], cv::IMREAD_GRAYSCALE);
 
-uchar dichotomy(std::function<void(uchar, double&, double&)> scoreFunction, uchar min, uchar max, std::string name) {
-	uchar param = (min + max) / 2;
-	double precision, recall;
-	bool found = false;
+	std::vector<parameterScore<int>> list;
+	int i = 0;
 
-	while (max - min > 1) {
-		param = (min + max) / 2;
-		scoreFunction(param, precision, recall);
-		if (precision <= 0 || recall <= 0) {
-			max = param;
-			continue;
+	double bestPerformance = 0;
+	double bestPrecision = 0;
+	double bestRecall = 0;
+	double bestSigma = 0;
+	double bestFactor = 0;
+
+	for (double sigma = 0.1; sigma < 5; sigma += 0.1) {
+		for (double factor = 0.1; factor < 1; factor += 0.1) {
+
+			auto clone = image.clone();
+			gaussianFilter(clone, 10, sigma);
+			sobelFilter(clone);
+			binaryFilter(clone, factor);
+
+			double precision, recall;
+			score(expected, clone, 1, precision, recall);
+			list.push_back(parameterScore<int>(i, precision, recall));
+			++i;
+
+			double performance = precision * precision + recall * recall / (abs(precision - recall) * abs(precision - recall));
+			if (bestPerformance < performance) {
+				bestPerformance = performance;
+				bestPrecision = precision;
+				bestRecall = recall;
+				bestSigma = sigma;
+				bestFactor = factor;
+			}
+
+			std::cout << " sigma=" << sigma;
+			std::cout << ", factor=" << factor;
+			std::cout << " => precision=" << precision;
+			std::cout << ", recall=" << recall;
+			std::cout << " => " << performance;
+			std::cout << std::endl;
 		}
-		found = true;
-		double score = precision / recall;
-		std::cout << "[" << name << "] " << (int)param << " => " << precision << " / " << recall << " = " << score << std::endl;
-		if (score < 1)
-			min = param;
-		else if (score > 1)
-			max = param;
-		else
-			return param;
 	}
-	return found ? param : -1;
+
+	std::cout << std::endl;
+	std::cout << "sigma=" << bestSigma;
+	std::cout << ", factor=" << bestFactor;
+	std::cout << " => precision=" << bestPrecision;
+	std::cout << ", recall=" << bestRecall;
+	std::cout << " => " << bestPerformance;
+	std::cout << std::endl;
+
+	cv::imshow("PR curve", prcurve(list));
+	cv::waitKey();
+
+	return 0;
 }
+

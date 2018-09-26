@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/headers",
-                "${OPENCV_DIR}/build/install/include/"
+                "${OPENCV_DIR}/install/include/"
             ],
             "defines": [
                 "_DEBUG",

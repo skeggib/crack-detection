@@ -1,4 +1,4 @@
-#include "tools.hpp"
+#include "filters.hpp"
 
 void gaussianFilter(cv::Mat& image, int l, double sigma) {
 	cv::Mat filtered;

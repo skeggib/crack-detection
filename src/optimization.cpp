@@ -29,6 +29,7 @@ int main(int argc, char** argv) {
 		for (double factor = 0.1; factor < 1; factor += 0.1) {
 
 			auto clone = image.clone();
+			cv::equalizeHist(image, image);
 			gaussianFilter(clone, 10, sigma);
 			sobelFilter(clone);
 			binaryFilter(clone, factor);

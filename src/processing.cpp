@@ -16,6 +16,8 @@ int main(int argc, char** argv) {
 
     auto image = cv::imread(inputPath, cv::IMREAD_GRAYSCALE);
 
+    cv::equalizeHist(image, image);
+
     if (args.containsOption("--gauss")) {
         auto sigma = std::stod(args["--gauss"]);
         gaussianFilter(image, 10, sigma);
@@ -33,6 +35,8 @@ int main(int argc, char** argv) {
         clusterRemoval(image, threshold);
     }
 
+    cv::imwrite(outputPath, image);
+    
     cv::imshow("Output image", image);
     cv::waitKey();
 

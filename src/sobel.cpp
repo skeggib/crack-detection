@@ -19,18 +19,18 @@ int main(int argc, char** argv) {
 	cv::imshow("blured", imageBlured);
 	cv::waitKey();*/
 
-	cv::Mat edges = sobelFilter(imageIn);
-	cv::imshow("edges", edges);
+	sobelFilter(imageIn);
+	cv::imshow("edges", imageIn);
 	cv::waitKey();
 
 	uchar threshold = 200;
 	if (argc >= 4)
 		threshold = std::stoi(argv[3]);
 
-	cv::Mat binary = binary(edges, threshold);
-	cv::imshow("imageOut", binary);
+	binaryFilter(imageIn, threshold);
+	cv::imshow("imageOut", imageIn);
 	cv::waitKey();
 
-	cv::imwrite(argv[2], binary);
+	cv::imwrite(argv[2], imageIn);
 	return 0;
 }

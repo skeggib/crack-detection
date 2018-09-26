@@ -15,10 +15,10 @@ int main(int argc, char** argv) {
 		return -1;
 	}
 
-	cv::Mat edges = sobelFilter(imageIn);
-	cv::Mat binary = binary(edges, 127);
-	cv::Mat cracks = clusterRemoval(binary, 18);
-	cv::imshow("image", cracks);
+	sobelFilter(imageIn);
+	binaryFilter(imageIn, 127);
+	clusterRemoval(imageIn, 18);
+	cv::imshow("image", imageIn);
 	cv::waitKey();
 
 	//cv::imwrite(argv[2], binary);

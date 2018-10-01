@@ -26,3 +26,23 @@ msbuild ALL_BUILD.vcxproj [/property:Configuration=Release]
 ```
 
 Mettre des DLL d'OpenCV dans les dossiers `build/Debug` et `build/Release`.
+
+### Linux
+
+Créer le dossier 'build' et se placer dedans.
+
+```bash
+mkdir build
+cd build
+```
+Générer le projet.
+
+```bash
+cmake ..
+```
+
+Compiler le projet :
+
+```bash
+make
+```

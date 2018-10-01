@@ -2,7 +2,6 @@
 project (crack-detection)
 set (CMAKE_CXX_STANDARD 11)
 
-# OpenCV
 find_package(OpenCV REQUIRED)
 
 include_directories (${OPENCV_INCLUDE_DIR})

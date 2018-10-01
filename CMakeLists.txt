@@ -23,7 +23,7 @@ add_executable(optimisation
     src/scoring.cpp)
 target_link_libraries (optimisation ${OpenCV_LIBS})
 
-add_executable(test
+add_executable(dev_test
     src/test.cpp
     src/filters.cpp)
-target_link_libraries (test ${OpenCV_LIBS})
+target_link_libraries (dev_test ${OpenCV_LIBS})

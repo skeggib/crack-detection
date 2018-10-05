@@ -14,6 +14,12 @@ add_executable(seuilGris
     src/filters.cpp)
 target_link_libraries (seuilGris ${OpenCV_LIBS})
 
+add_executable(sobel 
+    src/sobel.cpp
+    src/arguments.cpp
+    src/filters.cpp)
+target_link_libraries (sobel ${OpenCV_LIBS})
+
 add_executable(evaluation 
     src/evaluation.cpp
     src/scoring.cpp

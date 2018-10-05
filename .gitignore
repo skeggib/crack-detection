@@ -1,3 +1,9 @@
+# Other
+
+*.dll
+octave-workspace
+build/
+
 # CMake
 
 CMakeCache.txt
@@ -9,10 +15,6 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
-
-# DLL
-
-*.dll
 
 # Visual Studio
 
@@ -349,3 +351,4 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+/CrackDetection/CrackDetection/octave-workspace

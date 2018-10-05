@@ -8,7 +8,10 @@ find_package(OpenCV REQUIRED)
 include_directories (${OPENCV_INCLUDE_DIR})
 include_directories ("headers")
 
-add_executable(evaluation src/evaluation.cpp src/scoring.cpp)
+add_executable(evaluation 
+    src/evaluation.cpp
+    src/scoring.cpp
+    src/arguments.cpp)
 target_link_libraries (evaluation ${OpenCV_LIBS})
 
 add_executable(traitement 

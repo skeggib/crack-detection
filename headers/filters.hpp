@@ -7,7 +7,11 @@ void gaussianFilter(cv::Mat& image, int l, double sigma);
 
 void sobelFilter(cv::Mat& image);
 
+void laplacianFilter(cv::Mat& image);
+
 void binaryFilter(cv::Mat& image, double factor);
+
+void varianceFilter(cv::Mat & image, int l);
 
 class mPoint : public cv::Point {
 public:

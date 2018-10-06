@@ -25,6 +25,12 @@ add_executable(evaluation
     src/arguments.cpp)
 target_link_libraries (evaluation ${OpenCV_LIBS})
 
+add_executable(laplacien 
+    src/laplacien.cpp
+    src/arguments.cpp
+    src/filters.cpp)
+target_link_libraries (laplacien ${OpenCV_LIBS})
+
 add_executable(traitement 
     src/processing.cpp
     src/arguments.cpp

@@ -4,62 +4,27 @@
 
 #include "filters.hpp"
 
-cv::Mat pyrSobel(cv::Mat image, int level) {
-    for (int i = 0; i < level; ++i) {
-        cv::pyrDown(image, image);
-    }
-
-    sobelFilter(image);
-    
-    for (int i = 0; i < level; ++i) {
-        cv::pyrUp(image, image);
-    }
-
-    return image;
-}
-
-cv::Mat multPyrSobel(cv::Mat image, int maxLevel) {
-    std::vector<cv::Mat> scales;
-    for (int i = 0; i <= maxLevel; ++i) {
-        scales.push_back(pyrSobel(image, i));
+void variancePyramids(cv::Mat & image, int pyrsNumber, int lVariance, double binaryFactor) {
+    std::vector<cv::Mat> pyrs;
+    for (int i = 0; i < pyrsNumber; ++i) {
+        cv::Mat current = image.clone();
+        for (int j = 0; j < i; ++j)
+            cv::pyrDown(current, current);
+        varianceFilter(current, lVariance);
+        binaryFilter(current, binaryFactor);
+        for (int j = 0; j < i; ++j)
+            cv::pyrUp(current, current);
+        pyrs.push_back(current);
     }
 
     for (int y = 0; y < image.rows; ++y) {
         for (int x = 0; x < image.cols; ++x) {
-            cv::Point point(x, y);
-            image.at<uchar>(point) = 0;
-            for (int s = 0; s < scales.size(); ++s) {
-                int value = (maxLevel + 1 - s) * scales[s].at<uchar>(point);
-                if (value > image.at<uchar>(point))
-                    image.at<uchar>(point) = value;
+            image.at<uchar>(y, x) = 0;
+            for (int s = 0; s < pyrsNumber; ++s) {
+                if (pyrs[s].at<uchar>(y, x) == 255)
+                    image.at<uchar>(y, x) = 255;
+                    break;
             }
-        }
-    }
-
-    return image;
-}
-
-void varianceFilter(cv::Mat & image, int l) {
-    auto clone = image.clone();
-    for (int y = 0; y < clone.rows; ++y) {
-        for (int x = 0; x < clone.cols; ++x) {
-            int sum = 0;
-            int sqrs = 0;
-            int samples = 0;
-            for (int n = std::max(-l, -y); n <= std::min(l, clone.rows - y - 1); ++n) {
-                //std::cout << std::min(l, clone.rows - y) << std::endl;
-                for (int m = std::max(-l, -x); m <= std::min(l, clone.cols - x - 1); ++m) {
-                    //std::cout << x << " + " << m << ", " << y << " + " << n << std::endl;
-                    auto val = clone.at<uchar>(y + n, x + m);
-                    sum += val;
-                    sqrs += val * val;
-                    ++samples;
-                }
-            }
-            auto mean = (sum / (double)samples);
-            auto variance = sqrs / (double)samples - mean * mean;
-            if (variance > 255) variance = 255;
-            image.at<uchar>(y, x) = (uchar)variance;
         }
     }
 }
@@ -67,9 +32,29 @@ void varianceFilter(cv::Mat & image, int l) {
 int main() {
     auto image = cv::imread("input.jpg", cv::IMREAD_GRAYSCALE);
 
-    varianceFilter(image, 3);
-    
-    cv::imshow("image", image);
+    cv::equalizeHist(image, image);
+    gaussianFilter(image, 3, 1);
+
+    variancePyramids(image, 4, 10, 0.5);
+
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
+    cv::Mat temp(image.size(), CV_8UC1), skel(image.size(), CV_8UC1, cv::Scalar(0));
+    bool done = false;
+    do {
+        cv::morphologyEx(image, temp, cv::MORPH_OPEN, element);
+        cv::bitwise_not(temp, temp);
+        cv::bitwise_and(image, temp, temp);
+        cv::bitwise_or(skel, temp, skel);
+        cv::erode(image, image, element);
+        
+        double max;
+        cv::minMaxLoc(image, 0, &max);
+        done = (max == 0);
+    } while (!done);
+
+    clusterRemoval(skel, 10);
+
+    cv::imshow("image", skel);
     cv::waitKey();
 
     return 0;

@@ -23,6 +23,10 @@ void sobelFilter(cv::Mat& image) {
 	image = out;
 }
 
+void laplacianFilter(cv::Mat& image) {
+	cv::Laplacian(image, image, image.depth());
+}
+
 void binaryFilter(cv::Mat& image, double factor) {
 	cv::Mat out = image.clone();
 	double min, max;
@@ -39,6 +43,23 @@ void binaryFilter(cv::Mat& image, double factor) {
 		}
 	}
 	image = out;
+}
+
+void varianceFilter(cv::Mat & image, int l) {
+    cv::Mat image32f;
+    image.convertTo(image32f, CV_32F);
+
+    cv::Mat mean;
+    cv::blur(image32f, mean, cv::Size(l*2+1, l*2+1));
+
+    cv::Mat sqrs;
+    cv::blur(image32f.mul(image32f), sqrs, cv::Size(l*2+1, l*2+1));
+
+    cv::Mat sigma;
+    cv::sqrt(sqrs - mean.mul(mean), sigma);
+
+    cv::normalize(sigma, image, 0.0, 255.0, cv::NORM_MINMAX);
+    image.convertTo(image, CV_8UC1);
 }
 
 void clusterRemoval(cv::Mat& image, int threshold) {

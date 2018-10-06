@@ -7,7 +7,22 @@ find_package(OpenCV REQUIRED)
 include_directories (${OPENCV_INCLUDE_DIR})
 include_directories ("headers")
 
-add_executable(evaluation src/evaluation.cpp src/scoring.cpp)
+add_executable(seuilGris 
+    src/seuilGris.cpp
+    src/arguments.cpp
+    src/filters.cpp)
+target_link_libraries (seuilGris ${OpenCV_LIBS})
+
+add_executable(sobel 
+    src/sobel.cpp
+    src/arguments.cpp
+    src/filters.cpp)
+target_link_libraries (sobel ${OpenCV_LIBS})
+
+add_executable(evaluation 
+    src/evaluation.cpp
+    src/scoring.cpp
+    src/arguments.cpp)
 target_link_libraries (evaluation ${OpenCV_LIBS})
 
 add_executable(traitement 

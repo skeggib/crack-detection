@@ -1,25 +1,27 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+
 #include "scoring.hpp"
+#include "arguments.hpp"
 
 int main(int argc, char** argv) {
-	if (argc < 3) {
-		std::cout << "usage: ./evaluation image_binaire_verite terrain_image_binaire_sortie" << std::endl;
+
+	arguments_t args(argc, argv);
+
+	if (args.parametersSize() < 2) {
+		std::cout << "usage: " << argv[0] << " truth binary_image" << std::endl;
 		return 0;
 	}
 
-	auto pathTruth = argv[1];
-	auto pathOutput = argv[2];
-
-	cv::Mat matTruth = cv::imread(pathTruth, cv::IMREAD_GRAYSCALE);
+	cv::Mat matTruth = cv::imread(args[0], cv::IMREAD_GRAYSCALE);
 	if (!matTruth.data) {
-		std::cout << "Cannot load " << pathTruth << std::endl;
+		std::cout << "Cannot load " << args[0] << std::endl;
 		return 0;
 	}
 
-	cv::Mat matOutput = cv::imread(pathOutput, cv::IMREAD_GRAYSCALE);
+	cv::Mat matOutput = cv::imread(args[1], cv::IMREAD_GRAYSCALE);
 	if (!matOutput.data) {
-		std::cout << "Cannot load " << pathOutput << std::endl;
+		std::cout << "Cannot load " << args[1] << std::endl;
 		return 0;
 	}
 

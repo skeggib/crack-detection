@@ -1,48 +1,57 @@
-# APP5 - Crack detection
+# Crack detection
 
-Projet 1 du cours de traitement d'image.
+First project of the image processing course in the Polytech Paris-Sud engineer school.
 
-## Compilation
+The main goal of this project is to get familiar with features detection in grayscale images. For 
+this, we develop a toolchain that aims to detect cracks in road images. The algorithms are 
+implemented in C++ using the OpenCV library.
 
-### Windows
+## Requirements
 
-Créer le dossier 'build' et se placer dedans.
+- CMake
+- OpenCV
+
+## Building the project
+
+### Linux
+
+Create the 'build' folder and move into it:
 
 ```bash
 mkdir build
 cd build
 ```
 
-Générer le projet (utiliser `cmake --help` pour voir la liste des générateur). Par exemple :
+Generate the project using cmake:
+
+```bash
+cmake ..
+```
+Build the project:
+
+```bash
+make
+```
+
+### Windows
+
+Create the 'build' folder and move into it:
+
+```bash
+mkdir build
+cd build
+```
+
+Generate the project using cmake (use `cmake --help` to get the list of generators). For example:
 
 ```bash
 cmake .. -G "Visual Studio 15 2017 Win64"
 ```
 
-Compiler le projet.
+Build the project:
 
 ```bash
 msbuild ALL_BUILD.vcxproj [/property:Configuration=Release]
 ```
 
-Mettre des DLL d'OpenCV dans les dossiers `build/Debug` et `build/Release`.
-
-### Linux
-
-Créer le dossier 'build' et se placer dedans.
-
-```bash
-mkdir build
-cd build
-```
-Générer le projet.
-
-```bash
-cmake ..
-```
-
-Compiler le projet :
-
-```bash
-make
-```
+Copy the needed OpenCV DLLs into the `build/Debug` and `build/Release` folders.

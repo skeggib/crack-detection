@@ -23,7 +23,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/headers",
-                "~/opencv/**"
+                "~/opencv/**",
+                "/usr/include/**"
             ]
         }
     ],

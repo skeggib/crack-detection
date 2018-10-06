@@ -29,8 +29,8 @@ void variancePyramids(cv::Mat & image, int pyrsNumber, int lVariance, double bin
     }
 }
 
-int main() {
-    auto image = cv::imread("input.jpg", cv::IMREAD_GRAYSCALE);
+int main(int argc, char** argv) {
+    auto image = cv::imread(argv[1], cv::IMREAD_GRAYSCALE);
 
     cv::equalizeHist(image, image);
     gaussianFilter(image, 3, 1);
@@ -54,7 +54,7 @@ int main() {
 
     clusterRemoval(skel, 10);
 
-    cv::imshow("image", skel);
+    cv::imshow(argv[2], skel);
     cv::waitKey();
 
     return 0;

@@ -31,6 +31,12 @@ add_executable(laplacien
     src/filters.cpp)
 target_link_libraries (laplacien ${OpenCV_LIBS})
 
+add_executable(gradient_direction 
+    src/gradient_direction.cpp
+    src/arguments.cpp
+    src/filters.cpp)
+target_link_libraries (gradient_direction ${OpenCV_LIBS})
+
 add_executable(traitement 
     src/processing.cpp
     src/arguments.cpp

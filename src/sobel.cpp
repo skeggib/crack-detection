@@ -18,6 +18,7 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 
+	gaussianFilter(image, 1, 1);
     sobelFilter(image);
     binaryFilter(image, 0.5);
 

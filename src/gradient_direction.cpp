@@ -26,9 +26,6 @@ int main(int argc, char** argv) {
     cv::absdiff(grad_x, grad_y, image);
     binaryFilter(image, 0.25);
 
-    cv::imshow("result", image);
-    cv::waitKey();
-
     cv::imwrite(args[1], image);
     return 0;
 }

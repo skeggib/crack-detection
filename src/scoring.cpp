@@ -1,6 +1,6 @@
 #include "scoring.hpp"
 
-void score(cv::Mat expected, cv::Mat actual, int delta, double& precision, double& recall) {
+void score(cv::Mat expected, cv::Mat actual, int delta, double & precision, double & recall) {
 	assert(expected.cols == actual.cols);
 	assert(expected.rows == actual.rows);
 

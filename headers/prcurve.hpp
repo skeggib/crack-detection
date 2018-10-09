@@ -21,7 +21,7 @@ struct parameterScore {
 
 template <typename T>
 std::vector<parameterScore<T>> prlist(
-	std::function<void(T parameter, double& precision, double& recall)> scoreFunction,
+	std::function<void(T parameter, double & precision, double & recall)> scoreFunction,
 	T min,
 	T max,
 	T step) {
@@ -59,7 +59,7 @@ cv::Mat prcurve(std::vector<parameterScore<T>> prlist) {
 }
 
 template <typename T>
-void writeCsv(std::ostream& stream, std::vector<parameterScore<T>> scores) {
+void writeCsv(std::ostream & stream, std::vector<parameterScore<T>> scores) {
 	for (auto score : scores)
 	{
 		stream << score.parameter << ", ";

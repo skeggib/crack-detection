@@ -1,12 +1,12 @@
 #include "filters.hpp"
 
-void gaussianFilter(cv::Mat& image, int l, double sigma) {
+void gaussianFilter(cv::Mat & image, int l, double sigma) {
 	cv::Mat filtered;
 	cv::GaussianBlur(image, filtered, cv::Size(l*2+1, l * 2 + 1), sigma, sigma);
 	image = filtered;
 }
 
-void sobelFilter(cv::Mat& image) {
+void sobelFilter(cv::Mat & image) {
 	cv::Mat grad_x;
 	cv::Sobel(image, grad_x, image.depth(), 1, 0);
 	cv::Mat abs_grad_x;
@@ -23,15 +23,15 @@ void sobelFilter(cv::Mat& image) {
 	image = out;
 }
 
-void laplacianFilter(cv::Mat& image) {
+void laplacianFilter(cv::Mat & image) {
 	cv::Laplacian(image, image, image.depth());
 }
 
-void binaryFilter(cv::Mat& image, double factor) {
+void binaryFilter(cv::Mat & image, double factor) {
 	cv::Mat out = image.clone();
 	double min, max;
 	cv::minMaxLoc(out, &min, &max);
-	uchar threshold = max * factor;
+	uchar threshold = (uchar)(max * factor);
 	for (int x = 0; x < out.cols; x++)
 	{
 		for (int y = 0; y < out.rows; y++)
@@ -62,7 +62,7 @@ void varianceFilter(cv::Mat & image, int l) {
     image.convertTo(image, CV_8UC1);
 }
 
-void clusterRemoval(cv::Mat& image, int threshold) {
+void clusterRemoval(cv::Mat & image, int threshold) {
 	cv::Mat temp = image.clone();
 	cv::Mat out = cv::Mat(image.rows, image.cols, image.type());
 	for (int x = 0; x < out.cols; x++)

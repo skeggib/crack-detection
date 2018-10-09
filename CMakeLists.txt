@@ -37,6 +37,18 @@ add_executable(gradient_direction
     src/filters.cpp)
 target_link_libraries (gradient_direction ${OpenCV_LIBS})
 
+add_executable(precision
+    src/precision.cpp
+    src/arguments.cpp
+    src/scoring.cpp)
+target_link_libraries (precision ${OpenCV_LIBS})
+
+add_executable(recall
+    src/recall.cpp
+    src/arguments.cpp
+    src/scoring.cpp)
+target_link_libraries (recall ${OpenCV_LIBS})
+
 add_executable(traitement 
     src/processing.cpp
     src/arguments.cpp

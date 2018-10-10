@@ -37,6 +37,12 @@ add_executable(gradient_direction
     src/filters.cpp)
 target_link_libraries (gradient_direction ${OpenCV_LIBS})
 
+add_executable(low_freq_substraction 
+    src/low_freq_substraction.cpp
+    src/arguments.cpp
+    src/filters.cpp)
+target_link_libraries (low_freq_substraction ${OpenCV_LIBS})
+
 add_executable(traitement 
     src/processing.cpp
     src/arguments.cpp

@@ -3,6 +3,8 @@
 *.dll
 octave-workspace
 build/
+output.png
+scores.csv
 
 # CMake
 

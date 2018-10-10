@@ -7,6 +7,24 @@ find_package(OpenCV REQUIRED)
 include_directories (${OPENCV_INCLUDE_DIR})
 include_directories ("headers")
 
+add_executable(evaluation 
+    src/evaluation.cpp
+    src/scoring.cpp
+    src/arguments.cpp)
+target_link_libraries (evaluation ${OpenCV_LIBS})
+
+add_executable(precision
+    src/precision.cpp
+    src/arguments.cpp
+    src/scoring.cpp)
+target_link_libraries (precision ${OpenCV_LIBS})
+
+add_executable(recall
+    src/recall.cpp
+    src/arguments.cpp
+    src/scoring.cpp)
+target_link_libraries (recall ${OpenCV_LIBS})
+
 add_executable(seuilGris 
     src/seuilGris.cpp
     src/arguments.cpp
@@ -18,12 +36,6 @@ add_executable(sobel
     src/arguments.cpp
     src/filters.cpp)
 target_link_libraries (sobel ${OpenCV_LIBS})
-
-add_executable(evaluation 
-    src/evaluation.cpp
-    src/scoring.cpp
-    src/arguments.cpp)
-target_link_libraries (evaluation ${OpenCV_LIBS})
 
 add_executable(laplacien 
     src/laplacien.cpp
@@ -43,20 +55,8 @@ add_executable(low_freq_substraction
     src/filters.cpp)
 target_link_libraries (low_freq_substraction ${OpenCV_LIBS})
 
-add_executable(traitement 
-    src/processing.cpp
+add_executable(sobel_clusters 
+    src/sobel_clusters.cpp
     src/arguments.cpp
     src/filters.cpp)
-target_link_libraries (traitement ${OpenCV_LIBS})
-
-add_executable(optimisation
-    src/optimization.cpp
-    src/arguments.cpp
-    src/filters.cpp
-    src/scoring.cpp)
-target_link_libraries (optimisation ${OpenCV_LIBS})
-
-add_executable(dev_test
-    src/test.cpp
-    src/filters.cpp)
-target_link_libraries (dev_test ${OpenCV_LIBS})
+target_link_libraries (sobel_clusters ${OpenCV_LIBS})

@@ -1,7 +1,31 @@
-#include "scoring.hpp"
+#include <cmath>
+#include <opencv2/opencv.hpp>
+#include "darkness_algo_t.hpp"
 
-void score(cv::Mat expected, cv::Mat actual, int delta, double & precision, double & recall) {
-	assert(expected.cols == actual.cols);
+using namespace std;
+using namespace cv;
+
+Mat darkness_algo_t::work(Mat imageIn) { return imageIn.clone(); };
+
+Mat darkness_algo_t::find(Mat input, double threshold)
+{
+    auto output = input.clone();
+
+    for (int i = 0; i < output.rows; i++)
+    {
+        for (int j = 0; j < output.cols; j++)
+        {
+            output.at<uchar>(Point(j, i)) = input.at<uchar>(Point(j, i)) <= threshold ? UCHAR_MAX : 0;
+        }
+    }
+
+    return output;
+}
+
+score_t darkness_algo_t::eval(Mat expected, Mat actual)
+{
+    int delta = 2;
+    assert(expected.cols == actual.cols);
 	assert(expected.rows == actual.rows);
 
 	double truePositive = 0;
@@ -21,8 +45,8 @@ void score(cv::Mat expected, cv::Mat actual, int delta, double & precision, doub
 				else {
 					// Recherche dans le voisinnage
 					bool found = false;
-					for (int dx = std::max(-delta, -x); dx <= std::min(delta, expected.cols - x - 1) && !found; dx++) {
-						for (int dy = std::max(-delta, -y); dy <= std::min(delta, expected.rows - y - 1) && !found; dy++) {
+					for (int dx = max(-delta, -x); dx <= min(delta, expected.cols - x - 1) && !found; dx++) {
+						for (int dy = max(-delta, -y); dy <= min(delta, expected.cols - y - 1) && !found; dy++) {
 							if (actualValue == expected.at<unsigned char>(cv::Point(x + dx, y + dy)))
 								found = true;
 						}
@@ -42,6 +66,8 @@ void score(cv::Mat expected, cv::Mat actual, int delta, double & precision, doub
 		}
 	}
 
+    double precision, recall;
+
 	if ((truePositive + falsePositive) != 0)
 		precision = truePositive / (truePositive + falsePositive);
 	else
@@ -51,4 +77,6 @@ void score(cv::Mat expected, cv::Mat actual, int delta, double & precision, doub
 		recall = truePositive / (truePositive + falseNegative);
 	else
 		recall = -1;
+
+    return score_t(precision, recall);
 }

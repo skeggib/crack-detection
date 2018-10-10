@@ -18,9 +18,10 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 
-	gaussianFilter(image, 1, 1);
+	gaussianFilter(image, 5, 1.5);
     sobelFilter(image);
-    binaryFilter(image, 0.5);
+    binaryFilter(image, 0.2);
+    clusterRemoval(image, 200);
 
     cv::imwrite(args[1], image);
 

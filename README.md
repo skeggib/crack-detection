@@ -91,3 +91,11 @@ Applies a gaussian filter, a laplacian filter then a binary filter on an input i
 ```bash
 ./laplacien <input> <output>
 ```
+
+### `sobel_clusters`
+
+Sobel program with a clusters removal at the end.
+
+```bash
+./sobel_clusters <input> <output>
+```

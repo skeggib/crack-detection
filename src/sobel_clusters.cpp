@@ -23,9 +23,6 @@ int main(int argc, char** argv) {
     binaryFilter(image, 0.2);
     clusterRemoval(image, 200);
 
-    cv::imshow("result", image);
-    cv::waitKey();
-
     cv::imwrite(args[1], image);
 
     return 0;

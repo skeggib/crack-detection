@@ -2,6 +2,7 @@
 
 if [ $# -lt 3 ]; then
     echo "usage: $0 <algorithm> <precision> <recall> <images_folder>"
+    exit
 fi
 
 algorithm=$1
